@@ -1,37 +1,27 @@
 package com.bhz.android.caiyoubang.adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
-import android.preference.PreferenceManager;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bhz.android.caiyoubang.R;
 import com.bhz.android.caiyoubang.activity.CreateMenuActivity;
 import com.bhz.android.caiyoubang.info.CreateMenuStepInfo;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import static android.support.v4.app.ActivityCompat.startActivity;
-import static android.support.v4.app.ActivityCompat.startActivityForResult;
 
 
 /**
@@ -46,9 +36,10 @@ public class HyBaseAdapter extends BaseAdapter{
     CreateMenuActivity activity;
     String[] contentList;
     Uri stepImageUri;
+    Bitmap[] bitmaps = new Bitmap[10];
 
 
-    public HyBaseAdapter(CreateMenuActivity activity,Context context,List<CreateMenuStepInfo> list,Uri stepImageUri) {
+    public HyBaseAdapter(CreateMenuActivity activity, Context context, List<CreateMenuStepInfo> list, Uri stepImageUri) {
         this.stepImageUri = stepImageUri;
         this.activity = activity;
         this.context = context;
@@ -88,28 +79,34 @@ public class HyBaseAdapter extends BaseAdapter{
         holder.tvStepNumber.setText(""+i);//设置步骤数目
         contentList = new String[i];
         contentList[position] = holder.etStepContent.getText().toString();//----------------需要入库
+        //给步骤图片设点击事件
         holder.imageStep.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "",Toast.LENGTH_SHORT).show();
-                File fileImage = new File(Environment.getExternalStorageDirectory(),"stepImage.jpg");
+                //跳转相册
+                File outputImage = new File(Environment.getExternalStorageDirectory(), "outputImage"+position+".jpg");
                 try {
-                    if (fileImage.exists()){
-                        fileImage.delete();
+                    if (outputImage.exists()) {
+                        outputImage.delete();
                     }
-                    fileImage.createNewFile();
+                    outputImage.createNewFile();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                stepImageUri = Uri.fromFile(fileImage);
-                //跳转相机
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                intent.putExtra(MediaStore.EXTRA_OUTPUT,stepImageUri);
-                activity.startActivityForResult(intent,10);
+                stepImageUri = Uri.fromFile(outputImage);
 
+                Intent intent1 = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                intent1.setType("image/*");
+                intent1.putExtra("crop", true);
+                intent1.putExtra("scale", true);
+                intent1.putExtra(MediaStore.EXTRA_OUTPUT, stepImageUri);
+                activity.startActivityForResult(intent1,23);
             }
         });
 
+        if (bitmaps[position]!=null){
+            holder.imageStep.setImageBitmap(bitmaps[position]);
+        }
 
         return convertView;
     }
@@ -121,6 +118,12 @@ public class HyBaseAdapter extends BaseAdapter{
          list.add(stepInfo);
         notifyDataSetChanged();
     }
+
+    public void addImage(Bitmap[] bitmaps){
+        this.bitmaps = bitmaps;
+        notifyDataSetChanged();
+    }
+
     public final class ViewHolder{
         public TextView tvStepNumber;
         public ImageView imageStep;

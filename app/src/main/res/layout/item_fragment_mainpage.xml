@@ -29,22 +29,26 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:background="@null"
+                android:padding="10dp"
+                android:textSize="18sp"
                 android:text="设置" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="菜友帮"
+                android:text="食聊"
+                android:textColor="@color/colorCrociOne"
                 android:textSize="30sp" />
 
             <Button
                 android:id="@+id/mainpage_home_search"
-                android:layout_width="wrap_content"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:background="@null"
                 android:drawableRight="@mipmap/search"
+                android:paddingRight="10dp"
                 android:textSize="10sp" />
         </RelativeLayout>
 

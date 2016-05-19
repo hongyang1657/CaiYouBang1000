@@ -11,11 +11,12 @@
         android:textSize="20sp"
         android:padding="20dp"/>
     <ImageView
+        android:background="@mipmap/take_photo"
+        android:scaleType="centerCrop"
         android:clickable="true"
         android:id="@+id/image_step_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@mipmap/take_photo"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_toRightOf="@id/tv_step_number"/>
     <EditText
         android:id="@+id/et_step_content"

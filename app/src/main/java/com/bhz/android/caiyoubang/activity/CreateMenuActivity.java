@@ -35,8 +35,9 @@ import java.util.List;
  * Created by Administrator on 2016/4/13.
  */
 public class CreateMenuActivity extends Activity{
-    public static final int TAKE_PHOTO = 11;
-    public static final int CROP_PHOTO = 22;
+    public static final int TAKE_PHOTO = 11;//相机
+    public static final int PHOTO_GALLARY_Main = 22;//相册
+    public static final int CROP_PHOTO = 33;//剪裁
     ScrollListView listView;
     ImageView imageView;
     Button btAddStep;
@@ -50,12 +51,14 @@ public class CreateMenuActivity extends Activity{
     CreateMenuStepInfo stepInfo;
     List<CreateMenuStepInfo> menuInfoList;
     ImageView ivBack;
+    Bitmap bm = null;
+    int index = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.create_menu_layout);
-        dbHelper = new MyDbHelper(this);
+        dbHelper = new MyDbHelper(this,"MenuInfo.db",null,1);
         init();
         registerForContextMenu(imageView);//为imageview注册上下文菜单
 
@@ -120,7 +123,7 @@ public class CreateMenuActivity extends Activity{
                 intent1.putExtra("crop", true);
                 intent1.putExtra("scale", true);
                 intent1.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-                startActivityForResult(intent1,CROP_PHOTO);
+                startActivityForResult(intent1,PHOTO_GALLARY_Main);
 
                 break;
         }
@@ -134,18 +137,44 @@ public class CreateMenuActivity extends Activity{
             return;
         }
 
-        Bitmap bm = null;
+
 
         //外界的程序访问ContentProvider所提供数据 可以通过ContentResolver接口
         ContentResolver resolver = getContentResolver();
 
         //此处的用于判断接收的Activity是不是你想要的那个
-        if (requestCode == CROP_PHOTO) {
+        if (requestCode == PHOTO_GALLARY_Main) {
             try {
                 Uri originalUri = data.getData();        //获得图片的uri
 
                 bm = MediaStore.Images.Media.getBitmap(resolver, originalUri);        //显得到bitmap图片
                 imageView.setImageBitmap(bm);
+
+                String[] proj = {MediaStore.Images.Media.DATA};
+
+                //好像是Android多媒体数据库的封装接口，具体的看Android文档
+                Cursor cursor = managedQuery(originalUri, proj, null, null, null);
+                //按我个人理解 这个是获得用户选择的图片的索引值
+                int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                //将光标移至开头 ，这个很重要，不小心很容易引起越界
+                cursor.moveToFirst();
+                //最后根据索引值获取图片路径
+                String path = cursor.getString(column_index);
+
+            }catch (IOException e) {
+                Log.e("TAG",e.toString());
+            }
+        }
+
+        //步骤图片
+        if (requestCode == 23) {
+            try {
+                Uri originalUri = data.getData();        //获得图片的uri
+                Bitmap[] bitmaps = new Bitmap[10];
+                bitmaps[index] = MediaStore.Images.Media.getBitmap(resolver, originalUri);        //得到bitmap图片
+                //imageView.setImageBitmap(bm);
+                adapter.addImage(bitmaps);
+                index++;
 
                 String[] proj = {MediaStore.Images.Media.DATA};
 
@@ -173,7 +202,7 @@ public class CreateMenuActivity extends Activity{
         }
 
         //剪裁
-        if(requestCode==33){
+        if(requestCode==CROP_PHOTO){
             try {
                 Bitmap bitmap = BitmapFactory.decodeStream
                         (getContentResolver()
