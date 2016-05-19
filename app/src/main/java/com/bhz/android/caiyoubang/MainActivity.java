@@ -25,6 +25,8 @@ import com.bhz.android.caiyoubang.fragment.ShareFragment;
 
 import java.util.List;
 
+
+//hehe
 public class MainActivity extends Activity{//利用借口实现和fragment的数据互通
     FragmentManager fragmentManager;
     FragmentTransaction transaction;
