@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Gallery
+        android:id="@+id/guide_gallery"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></Gallery>
+
+    <RadioGroup
+        android:id="@+id/guide_radiogroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:orientation="horizontal"
+        android:background="@null">
+
+        <RadioButton
+            android:id="@+id/guide_choose1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:enabled="true"
+            android:background="@null"/>
+
+        <RadioButton
+            android:id="@+id/guide_choose2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:enabled="true"
+            android:background="@null"/>
+
+        <RadioButton
+            android:id="@+id/guide_choose3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:enabled="true"
+            android:background="@null"/>
+
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/guide_startbutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:background="@null"
+        android:orientation="horizontal"
+        android:text="开始美食之旅"
+        android:visibility="invisible"
+        android:textColor="#FFFFFF"/>
+</RelativeLayout>

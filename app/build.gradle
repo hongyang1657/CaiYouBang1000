@@ -1,0 +1,41 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.1"
+
+    defaultConfig {
+        applicationId "com.bhz.android.caiyoubang"
+        minSdkVersion 17
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+repositories{
+    flatDir{
+dirs'libs'      // 存放短信验证服务的目录地址
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile name: 'SMSSDK-2.0.2', ext: 'aar'
+    compile name: 'SMSSDKGUI-2.0.2', ext: 'aar'
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:23.1.1'
+    compile files('libs/open_sdk_r5509.jar')
+    compile files('libs/mta-sdk-1.6.2.jar')
+    compile 'com.squareup.picasso:picasso:2.5.2'
+    compile files('libs/libammsdk.jar')
+    compile files('libs/weiboSDKCore_3.1.4.jar')
+    compile 'com.squareup.okhttp3:okhttp:3.2.0'
+    compile project(':library')
+}
